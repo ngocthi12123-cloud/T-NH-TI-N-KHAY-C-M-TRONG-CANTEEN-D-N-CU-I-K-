@@ -1,0 +1,44 @@
+{
+  "regions": [
+    {
+      "name": "top_left",
+      "x": 100,
+      "y": 160,
+      "w": 690,
+      "h": 620,
+      "label": "thit_kho"
+    },
+    {
+      "name": "middle_left",
+      "x": 100,
+      "y": 840,
+      "w": 690,
+      "h": 560,
+      "label": "dau_hu_sot_ca"
+    },
+    {
+      "name": "bottom_left",
+      "x": 100,
+      "y": 1500,
+      "w": 690,
+      "h": 780,
+      "label": "canh_rau"
+    },
+    {
+      "name": "top_right",
+      "x": 830,
+      "y": 160,
+      "w": 1000,
+      "h": 1050,
+      "label": "canh_chua_khong_ca"
+    },
+    {
+      "name": "bottom_right",
+      "x": 830,
+      "y": 1460,
+      "w": 1000,
+      "h": 800,
+      "label": "com_trang"
+    }
+  ]
+}

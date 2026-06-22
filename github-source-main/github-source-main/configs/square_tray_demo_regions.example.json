@@ -1,0 +1,43 @@
+{
+  "regions": [
+    {
+      "name": "rice",
+      "x": 36,
+      "y": 34,
+      "w": 330,
+      "h": 190,
+      "label": "com_trang"
+    },
+    {
+      "name": "soup",
+      "x": 30,
+      "y": 312,
+      "w": 355,
+      "h": 265
+    },
+    {
+      "name": "cucumber",
+      "x": 398,
+      "y": 65,
+      "w": 170,
+      "h": 150,
+      "label": "ignore"
+    },
+    {
+      "name": "sauce",
+      "x": 416,
+      "y": 250,
+      "w": 125,
+      "h": 95,
+      "label": "ignore"
+    },
+    {
+      "name": "extra_fried_item",
+      "x": 400,
+      "y": 390,
+      "w": 200,
+      "h": 175,
+      "label": "ignore"
+    }
+  ]
+}

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout the Canteen</title>
+  <meta name="description" content="AI-powered canteen checkout: crop, classify, price, and export food items.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/demo_checkout.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <div>
+          <h1>Checkout the Canteen</h1>
+          <p>Crop, classify, price, export.</p>
+        </div>
+      </div>
+      <div class="top-actions hud-controls">
+        <!-- Image Controls -->
+        <div class="hud-group">
+          <select id="imageSelect" class="hud-input"></select>
+          <button id="loadImageBtn" class="btn btn-secondary hud-btn" type="button">Load</button>
+          <label class="btn btn-secondary file-btn hud-btn" for="uploadInput">Upload</label>
+          <input id="uploadInput" type="file" accept="image/*" style="display:none;">
+        </div>
+
+        <!-- Model Controls (Hidden settings, just the Predict button) -->
+        <div class="hud-group run-group">
+          <button id="runBtn" class="btn btn-primary run-btn hud-run" type="button">
+            <span class="gem"></span><span class="gem"></span><span class="gem"></span><span class="gem"></span>
+            <span class="run-label">✦ Predict</span>
+          </button>
+        </div>
+
+        <span id="modelBadge" class="status-text model-badge">Model status</span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <!-- Left control rail removed as requested -->
+
+      <!-- ═══ CENTER: Image viewport (takes most space) ═══ -->
+      <section class="stage">
+        <div class="stage-toolbar">
+          <div class="toolbar-left">
+            <div class="eyebrow">Food regions</div>
+            <div class="crop-tools">
+              <span class="status-text">Fixed 5-compartment grid</span>
+              <label for="zoomInput" class="hud-label" style="margin-left: 10px;">Zoom:</label>
+              <input id="zoomInput" type="range" min="0.45" max="2.4" step="0.05" value="1" style="width: 80px;">
+            </div>
+          </div>
+          <div class="toolbar-actions">
+            <span id="status" class="status-text">Waiting</span>
+            <button id="fitBtn" class="btn btn-secondary icon-btn" type="button" title="Fit image">Fit</button>
+            <button id="clearBillBtn" class="btn btn-secondary icon-btn" type="button" title="Clear bill">Clear</button>
+          </div>
+        </div>
+
+        <div id="viewport" class="tray-viewport">
+          <div id="imageBox" class="image-box">
+            <img id="trayImage" alt="Selected canteen tray">
+            <svg id="overlay" aria-label="Detected food regions"></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ RIGHT: Bill results ═══ -->
+      <aside class="bill-rail">
+        <section class="customer-panel">
+          <div class="panel-title">Thành viên</div>
+          <div class="customer-entry">
+            <input id="phoneInput" type="tel" inputmode="tel" autocomplete="tel" maxlength="18" placeholder="Số điện thoại">
+            <button id="lookupCustomerBtn" class="btn btn-secondary compact-btn" type="button">Tra cứu</button>
+            <button id="createCustomerBtn" class="btn btn-primary compact-btn hidden" type="button">Tạo mới</button>
+          </div>
+          <div id="customerMessage" class="inline-message">Chưa chọn thành viên</div>
+          <div id="memberSummary" class="member-summary hidden">
+            <div class="member-identity">
+              <strong id="memberPhone"></strong>
+              <span id="memberPoints" class="points-chip">0 điểm</span>
+              <button id="clearCustomerBtn" class="clear-member" type="button" title="Bỏ chọn thành viên" aria-label="Bỏ chọn thành viên">×</button>
+            </div>
+            <label class="field-label" for="voucherSelect">Voucher cho bill này</label>
+            <select id="voucherSelect" class="wide-select">
+              <option value="">Không dùng voucher</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="bill-total">
+          <div class="panel-title">Bill</div>
+          <span class="total-label">Total</span>
+          <div id="totalValue" class="total-value">0 VND</div>
+          <div id="billMeta" class="bill-meta">Waiting for checkout</div>
+          <div id="billBreakdown" class="bill-breakdown hidden">
+            <div><span>Tạm tính</span><strong id="grossValue">0 VND</strong></div>
+            <div><span>Voucher</span><strong id="discountValue">−0 VND</strong></div>
+          </div>
+          <button id="confirmPaymentBtn" class="btn btn-primary confirm-btn hidden" type="button">Xác nhận thanh toán</button>
+          <div id="paymentMessage" class="inline-message"></div>
+        </section>
+
+        <section id="rewardPanel" class="reward-panel hidden">
+          <div class="panel-title">Đổi điểm cho lần sau</div>
+          <select id="rewardSelect" class="wide-select"></select>
+          <button id="issueVoucherBtn" class="btn btn-secondary reward-btn" type="button">Đổi voucher</button>
+          <div id="rewardMessage" class="inline-message"></div>
+        </section>
+
+        <section class="bill-list-panel">
+          <div class="panel-title">Detected items</div>
+          <div id="billList" class="bill-list empty-state">No items yet</div>
+        </section>
+
+        <!-- Nutrition Advice -->
+        <section id="nutritionAdvice" class="nutrition-panel" style="display:none">
+          <div class="panel-title">🥗 Dinh dưỡng bữa ăn</div>
+        </section>
+
+        <!-- QR Payment -->
+        <section id="qrSection" class="qr-panel" style="display:none">
+          <div class="panel-title">📱 Thanh toán QR</div>
+          <div class="qr-wrap">
+            <div class="qr-badge">Quét để thanh toán</div>
+            <div id="qrCanvas" class="qr-canvas"></div>
+            <div class="qr-note">Xuất trình mã QR này tại quầy thu ngân 🏪</div>
+          </div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div id="loading" class="loading hidden">
+    <div class="pulse-ring"></div>
+    <div>
+      <strong>Running checkout</strong>
+      <span>Generating crops and bill...</span>
+    </div>
+  </div>
+
+  <script src="/static/demo_checkout.js"></script>
+</body>
+</html>

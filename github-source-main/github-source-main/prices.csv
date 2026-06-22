@@ -1,0 +1,12 @@
+id,class_name,display_name,price_vnd,reward_points,note
+0,com_trang,Cơm trắng,10000,10,Một giá tiền nhiều hay ít
+1,dau_hu_sot_ca,Đậu hũ sốt cà,25000,25,
+2,ca_hu_kho,Cá hú kho,30000,30,
+3,thit_kho_trung,Thịt kho trứng,30000,30,"Một trứng, thêm 1 trứng + 6.000 đồng"
+4,thit_kho,Thịt kho,25000,25,Không có trứng
+5,canh_chua_co_ca,Canh chua có cá,25000,25,
+6,canh_chua_khong_ca,Canh chua không cá,10000,10,
+7,suon_nuong,Sườn nướng,30000,30,
+8,canh_rau,Canh rau,7000,7,Cải hoặc muống
+9,rau_xao,Rau xào,10000,10,Lagim/củ sắn/đậu que/đậu đũa
+10,trung_chien,Trứng chiên,25000,25,Trứng chiên thịt
